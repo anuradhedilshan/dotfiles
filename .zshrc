@@ -111,6 +111,9 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 alias dotfiles='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 
 bindkey -s ^f "tmux-sessionizer\n"
+bindkey -s '\eh' "tmux-sessionizer -s 0\n"
+bindkey -s '\eP' "tmux-sessionizer /mnt/dev/Projects/"
+bindkey -s '\ep' "tmux-sessionizer ~/Documents/Projects/"
 
 
 
