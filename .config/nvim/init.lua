@@ -91,6 +91,13 @@ vim.opt.incsearch = true -- turn on incremental search
 vim.o.termguicolors = true -- set term gui colors (most terminals support this)
 
 
+-- Enable folding
+vim.o.foldenable = true  
+      -- open files with folding enabled  
+vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+vim.opt.foldmethod = 'expr' -- use expression for folds -- Treesitter folding
+vim.o.foldlevel = 99           -- keep folds open by default
+vim.o.foldlevelstart = 99      -- don’t collapse everything on file open
 
 
 -- Better paste in visual mode
@@ -196,6 +203,8 @@ require("lazy").setup({
 
 
 
+
+-- ColorMyPencils()
 -- Load custom plugins
 
 vim.keymap.set('n','<leader>gs', '<cmd>Neogit<CR>', { desc = 'Open neogit Status' })
