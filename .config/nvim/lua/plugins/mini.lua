@@ -1,5 +1,7 @@
 -- Collection of various small independent plugins/modules
 return {
+  { 'JoosepAlviste/nvim-ts-context-commentstring'},
+  {
   'echasnovski/mini.nvim',
   config = function()
     -- Better Around/Inside textobjects
@@ -16,7 +18,19 @@ return {
     -- - sd'   - [S]urround [D]elete [']quotes
     -- - sr)'  - [S]urround [R]eplace [)] [']
     require('mini.surround').setup()
-
+    require('mini.comment').setup({
+      mappings = {
+        comment = '<C-/>',       -- Toggle comment for motion/textobject
+        comment_line = '<C-/>',  -- Toggle comment on current line
+        textobject = 'gc',       -- Define 'comment' textobject (using standard 'gc')
+      },
+      options = {
+        custom_commentstring = function()
+          return require('ts_context_commentstring').calculate_commentstring() or vim.bo.commentstring
+        end,
+      },
+    })
+    require('mini.completion').setup()
     -- Simple and easy statusline.
     --  You could remove this setup call if you don't like it,
     --  and try some other statusline plugin
@@ -35,4 +49,5 @@ return {
     -- ... and there is more!
     --  Check out: https://github.com/echasnovski/mini.nvim
   end,
+}
 }

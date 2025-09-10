@@ -88,7 +88,7 @@ vim.o.confirm = true
 vim.opt.hlsearch = false -- turn off highlight on search  
 vim.opt.incsearch = true -- turn on incremental search
 
-vim.o.termguicolors = true -- set term gui colors (most terminals support this)
+vim.o.termguicolors = true -- set term gui colors (most terminalswW support this)
 
 
 -- Enable folding
