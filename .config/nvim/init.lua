@@ -1,4 +1,3 @@
-
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
@@ -12,7 +11,6 @@ vim.g.have_nerd_font = true
 -- See `:help vim.o`
 -- NOTE: You can change these options as you wish!
 --  For more options, you can see `:help option-list`
-
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.o.mouse = 'a'
@@ -68,8 +66,6 @@ vim.o.inccommand = 'split'
 -- Show which line your cursor is on
 vim.o.cursorline = true
 
-
-
 -- Make line numbers default
 vim.o.number = true
 -- You can also add relative line numbers, to help with jumping.
@@ -85,24 +81,21 @@ vim.o.scrolloff = 10
 -- See `:help 'confirm'`
 vim.o.confirm = true
 
-vim.opt.hlsearch = false -- turn off highlight on search  
+vim.opt.hlsearch = false -- turn off highlight on search
 vim.opt.incsearch = true -- turn on incremental search
 
 vim.o.termguicolors = true -- set term gui colors (most terminalswW support this)
 
-
 -- Enable folding
-vim.o.foldenable = true  
-      -- open files with folding enabled  
+vim.o.foldenable = true
+-- open files with folding enabled
 vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
 vim.opt.foldmethod = 'expr' -- use expression for folds -- Treesitter folding
-vim.o.foldlevel = 99           -- keep folds open by default
-vim.o.foldlevelstart = 99      -- don’t collapse everything on file open
-
+vim.o.foldlevel = 99 -- keep folds open by default
+vim.o.foldlevelstart = 99 -- don’t collapse everything on file open
 
 -- Better paste in visual mode
-vim.keymap.set("x", "<leader>p", [["_dP]])
-
+vim.keymap.set('x', '<leader>p', [["_dP]])
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
@@ -112,7 +105,7 @@ vim.keymap.set("x", "<leader>p", [["_dP]])
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
 -- Diagnostic keymaps
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+-- vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
@@ -123,7 +116,7 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
 -- switch to Explore viewr
-vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
+vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
 
 -- TIP: Disable arrow keys in normal mode
 -- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
@@ -140,30 +133,25 @@ vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right win
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
-
-
-
-
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
--- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
--- vim.keymap.set("n", "<C-S-l>", "<C-w>L", { desc = "Move window to the right" })
--- vim.keymap.set("n", "<C-S-j>", "<C-w>J", { desc = "Move window to the lower" })
--- vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
-
+ vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
+ vim.keymap.set("n", "<C-S-l>", "<C-w>L", { desc = "Move window to the right" })
+ vim.keymap.set("n", "<C-S-j>", "<C-w>J", { desc = "Move window to the lower" })
+ vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
 
 -- Move Line
 
-vim.keymap.set("n", "<A-j>", ":m .+1<CR>==") -- move line up(n)
-vim.keymap.set("n", "<A-k>", ":m .-2<CR>==") -- move line down(n)
-vim.keymap.set("v", "<A-j>", ":m '>+1<CR>gv=gv") -- move line up(v)
-vim.keymap.set("v", "<A-k>", ":m '<-2<CR>gv=gv") -- move line down(v)
-
+vim.keymap.set('n', '<A-j>', ':m .+1<CR>==') -- move line up(n)
+vim.keymap.set('n', '<A-k>', ':m .-2<CR>==') -- move line down(n)
+vim.keymap.set('v', '<A-j>', ":m '>+1<CR>gv=gv") -- move line up(v)
+vim.keymap.set('v', '<A-k>', ":m '<-2<CR>gv=gv") -- move line down(v)
 
 -- Plugin manager shortcuts
 vim.keymap.set('n', '<leader>cl', '<cmd>Lazy<CR>', { desc = 'Open Lazy plugin manager' })
 vim.keymap.set('n', '<leader>cm', '<cmd>Mason<CR>', { desc = 'Open Mason package manager' })
 
-
+-- custom
+vim.keymap.set('n', '<leader>S', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -179,6 +167,24 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+-- Save fold 
+-- Create augroup
+ local remember_folds = vim.api.nvim_create_augroup("remember_folds", { clear = true })
+
+ -- Save view (folds, cursor, etc.) on buffer leave
+ vim.api.nvim_create_autocmd("BufWinLeave", {
+   group = remember_folds,
+     pattern = "*",
+       command = "mkview 1",
+       })
+
+       -- Load view when reopening buffer
+       vim.api.nvim_create_autocmd("BufWinEnter", {
+         group = remember_folds,
+           pattern = "*",
+             command = "silent! loadview 1",
+             })
+             
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
@@ -194,17 +200,14 @@ end
 local rtp = vim.opt.rtp
 rtp:prepend(lazypath)
 
-require("lazy").setup({
+require('lazy').setup {
   spec = {
     -- import your plugins
-    { import = "plugins" },
-  }
-})
-
-
-
+    { import = 'plugins' },
+  },
+}
 
 -- ColorMyPencils()
 -- Load custom plugins
 
-vim.keymap.set('n','<leader>gs', '<cmd>Neogit<CR>', { desc = 'Open neogit Status' })
+vim.keymap.set('n', '<leader>gs', '<cmd>Neogit<CR>', { desc = 'Open neogit Status' })
