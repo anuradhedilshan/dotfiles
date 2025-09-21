@@ -20,8 +20,8 @@ return {
       require('mini.surround').setup()
       require('mini.comment').setup {
         mappings = {
-          comment = '<C-/>', -- Toggle comment for motion/textobject
-          comment_line = '<C-/>', -- Toggle comment on current line
+          comment = 'gc', -- Toggle comment for motion/textobject
+          comment_line = 'gcc', -- Toggle comment on current line
           textobject = 'gc', -- Define 'comment' textobject (using standard 'gc')
         },
         options = {

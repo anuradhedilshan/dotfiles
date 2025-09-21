@@ -134,10 +134,10 @@ vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower win
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
- vim.keymap.set("n", "<C-S-l>", "<C-w>L", { desc = "Move window to the right" })
- vim.keymap.set("n", "<C-S-j>", "<C-w>J", { desc = "Move window to the lower" })
- vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
+vim.keymap.set('n', '<C-S-h>', '<C-w>H', { desc = 'Move window to the left' })
+vim.keymap.set('n', '<C-S-l>', '<C-w>L', { desc = 'Move window to the right' })
+vim.keymap.set('n', '<C-S-j>', '<C-w>J', { desc = 'Move window to the lower' })
+vim.keymap.set('n', '<C-S-k>', '<C-w>K', { desc = 'Move window to the upper' })
 
 -- Move Line
 
@@ -153,6 +153,10 @@ vim.keymap.set('n', '<leader>cm', '<cmd>Mason<CR>', { desc = 'Open Mason package
 -- custom
 vim.keymap.set('n', '<leader>S', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
 
+-- Comment toggle with Ctrl+/ (works across terminals)
+vim.keymap.set('n', '<C-_>', 'gcc', { desc = 'Toggle comment line', remap = true })
+vim.keymap.set('v', '<C-_>', 'gc', { desc = 'Toggle comment selection', remap = true })
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
@@ -167,24 +171,28 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
--- Save fold 
+-- Save fold
 -- Create augroup
- local remember_folds = vim.api.nvim_create_augroup("remember_folds", { clear = true })
+local remember_folds = vim.api.nvim_create_augroup('remember_folds', { clear = true })
 
- -- Save view (folds, cursor, etc.) on buffer leave
- vim.api.nvim_create_autocmd("BufWinLeave", {
-   group = remember_folds,
-     pattern = "*",
-       command = "mkview 1",
-       })
+-- Save view (folds, cursor, etc.) on buffer leave
+vim.api.nvim_create_autocmd('BufWinLeave', {
+  group = remember_folds,
+  pattern = '*',
+  callback = function()
+    if vim.bo.buftype == '' and vim.fn.expand('%') ~= '' then
+      vim.cmd('mkview 1')
+    end
+  end,
+})
 
-       -- Load view when reopening buffer
-       vim.api.nvim_create_autocmd("BufWinEnter", {
-         group = remember_folds,
-           pattern = "*",
-             command = "silent! loadview 1",
-             })
-             
+-- Load view when reopening buffer
+vim.api.nvim_create_autocmd('BufWinEnter', {
+  group = remember_folds,
+  pattern = '*',
+  command = 'silent! loadview 1',
+})
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
