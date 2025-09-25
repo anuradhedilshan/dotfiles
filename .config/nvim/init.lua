@@ -127,6 +127,7 @@ vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
 -- Keybinds to make split navigation easier.
 --  Use CTRL+<hjkl> to switch between windows
 --
+
 --  See `:help wincmd` for a list of all window commands
 vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
@@ -180,8 +181,8 @@ vim.api.nvim_create_autocmd('BufWinLeave', {
   group = remember_folds,
   pattern = '*',
   callback = function()
-    if vim.bo.buftype == '' and vim.fn.expand('%') ~= '' then
-      vim.cmd('mkview 1')
+    if vim.bo.buftype == '' and vim.fn.expand '%' ~= '' then
+      vim.cmd 'mkview 1'
     end
   end,
 })
