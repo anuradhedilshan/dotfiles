@@ -93,7 +93,20 @@ vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
 vim.opt.foldmethod = 'expr' -- use expression for folds -- Treesitter folding
 vim.o.foldlevel = 99 -- keep folds open by default
 vim.o.foldlevelstart = 99 -- don’t collapse everything on file open
+-- smart Indent
+vim.opt.smartindent = true
 
+vim.opt.wrap = false
+
+vim.opt.swapfile = false
+vim.opt.backup = false
+vim.opt.undodir = os.getenv 'HOME' .. '/.vim/undodir'
+vim.opt.undofile = true
+
+vim.opt.hlsearch = false
+vim.opt.incsearch = true
+
+vim.opt.termguicolors = true
 -- Better paste in visual mode
 vim.keymap.set('x', '<leader>p', [["_dP]])
 
@@ -217,6 +230,6 @@ require('lazy').setup {
 }
 
 -- ColorMyPencils()
--- Load custom plugins
 
+vim.cmd.colorscheme 'rose-pine'
 vim.keymap.set('n', '<leader>gs', '<cmd>Neogit<CR>', { desc = 'Open neogit Status' })
