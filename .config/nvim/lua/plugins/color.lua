@@ -6,8 +6,16 @@ function ColorMyPencils(color)
 
   vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
   vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
+  vim.api.nvim_set_hl(0, 'NormalNC', { bg = 'none' })
 end
 
+-- Create autocmd to reapply colors when new windows are created
+-- vim.api.nvim_create_autocmd({'WinNew', 'WinEnter', 'BufWinEnter'}, {
+--   callback = function()
+--     ColorMyPencils()
+--   end,
+-- })
+--
 return {
 
   {

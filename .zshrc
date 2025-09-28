@@ -116,4 +116,9 @@ bindkey -s '\eP' "tmux-sessionizer /mnt/dev/Projects/"
 bindkey -s '\ep' "tmux-sessionizer ~/Documents/Projects/"
 
 
+export PATH="$HOME/.pyenv/bin:$PATH"
+eval "$(pyenv init --path)"
+eval "$(pyenv virtualenv-init -)"
+
+
 
