@@ -4,20 +4,24 @@ return {
   ---@type oil.SetupOpts
   opts = {},
   -- Optional dependencies
-  dependencies = { { "echasnovski/mini.icons", opts = {} } },
+  dependencies = { { 'echasnovski/mini.icons', opts = {} } },
   -- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if you prefer nvim-web-devicons
   -- Lazy loading is not recommended because it is very tricky to make it work correctly in all situations.
   lazy = false,
   config = function()
-    require("oil").setup({
+    require('oil').setup {
       default_file_explorer = true, -- replace netrw
       view_options = {
         show_hidden = true,
       },
-    })
+      -- 🚫 prevent Oil from auto-changing the cwd
+      update_cwd = false,
+      restore_win_options = true,
+    }
 
     -- Keymap to open parent directory
-    vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
-    vim.keymap.set("n", "<leader>e", "<CMD>Oil<CR>", { desc = "File Explorer (Oil)" })
+    vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
+    vim.keymap.set('n', '<leader>e', '<CMD>Oil<CR>', { desc = 'File Explorer (Oil)' })
   end,
 }
+
