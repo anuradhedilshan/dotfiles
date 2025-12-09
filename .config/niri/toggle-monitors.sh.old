@@ -1,0 +1,187 @@
+#!/usr/bin/env bash
+# Smart Niri monitor switcher
+# Requires: niri, notify-send, zenity, readlink, ln, sleep, setsid, nohup
+# Installs a symlink at $ACTIVE -> $PROFILE_DIR/<profile>.kdl and reloads niri
+
+set -euo pipefail
+
+BASE="$HOME/.config/niri"
+ACTIVE="$BASE/monitors.kdl"
+PROFILE_DIR="$BASE/profiles"
+LOG="$BASE/toggle.log"
+INTERNAL_ID="eDP-1"
+# detect primary external name from runtime if present, fallback to known
+DEFAULT_EXTERNAL_ID="HDMI-A-1"
+
+timestamp(){ date +"%Y-%m-%d %H:%M:%S"; }
+log(){ echo "$(timestamp) | $1" >> "$LOG"; }
+
+notify(){ notify-send "Display Mode" "$1"; log "$1"; }
+
+# Read current connected/enabled state from `niri msg outputs`
+get_outputs_raw(){ niri msg outputs 2>/dev/null || niri msg outputs; }
+
+# Returns 0 if output is present *and* enabled
+is_output_enabled(){
+  local name="$1"
+  # parse the block for that output and search for "Disabled"
+  # If "Disabled" found -> return 1, else return 0 (enabled)
+  get_outputs_raw | awk -v n="$name" '
+    BEGIN{found=0; disabled=0}
+    /^Output /{
+      block=""
+    }
+    {
+      block = block $0 "\n"
+    }
+    index($0, "(" n ")") { found=1; print block; block=""; exit }
+    END{ if (!found) exit 2 }' > /tmp/niri_out.$$ 2>/dev/null || true
+
+  if [ ! -s /tmp/niri_out.$$ ]; then
+    rm -f /tmp/niri_out.$$
+    return 2   # not present
+  fi
+
+  if grep -q 'Disabled' /tmp/niri_out.$$; then
+    rm -f /tmp/niri_out.$$
+    return 1   # present but disabled
+  else
+    rm -f /tmp/niri_out.$$
+    return 0   # enabled
+  fi
+}
+
+# List detected external outputs (non-internal)
+detect_externals(){
+  # list all names inside parentheses and filter out internal
+  get_outputs_raw | grep -oP '\([^)]+\)' | tr -d '()' | awk -v i="$INTERNAL_ID" '$0!=i {print}' | uniq
+}
+
+# Apply profile symlink and reload niri
+apply_profile(){
+  local profile="$1" prev
+  prev="$(readlink -f "$ACTIVE" 2>/dev/null || true)"
+  ln -sf "$PROFILE_DIR/$profile" "$ACTIVE"
+  notify "Applying: ${profile%.*}"
+  log "apply_profile: from=$prev to=$PROFILE_DIR/$profile"
+  /usr/bin/niri msg reload-outputs 2>/dev/null || niri msg reload-outputs 2>/dev/null || true
+  sleep 1
+  echo "$prev"
+}
+
+# Verify expected enabled/disabled state after applying profile
+verify_profile(){
+  local profile="$1"
+  # expected rules by profile name
+  case "$profile" in
+    laptop_only.kdl) expected_internal=0; expected_external=1 ;; # enabled=0 means enabled in is_output_enabled() return semantics (0 enabled)
+    external_only.kdl) expected_internal=1; expected_external=0 ;;
+    both.kdl) expected_internal=0; expected_external=0 ;;
+    mirror.kdl) expected_internal=0; expected_external=0 ;;
+    *) return 0 ;;
+  esac
+
+  # use first external detected as representative
+  ext="$(detect_externals | head -n1 || true)"
+  if [ -z "$ext" ]; then
+    # no external present -> only internal should be enabled
+    is_output_enabled "$INTERNAL_ID" || return 1
+    return 0
+  fi
+
+  is_output_enabled "$INTERNAL_ID"; intern_status=$?
+  is_output_enabled "$ext"; ext_status=$?
+
+  # translate: intern_status 0(enabled) -> matches expected_internal 0
+  if [ "$intern_status" -ne "$expected_internal" ] || [ "$ext_status" -ne "$expected_external" ]; then
+    return 1
+  fi
+  return 0
+}
+
+# Detached rollback scheduler: restore prev symlink after $minutes minutes
+schedule_rollback(){
+  local prev_symlink="$1"
+  local minutes="$2"
+  local seconds=$((minutes*60))
+  log "scheduling rollback in ${minutes}m (cmd: restore symlink to $prev_symlink)"
+  # build a small one-liner that restores the symlink and reloads niri
+  cmd="ln -sf '$prev_symlink' '$ACTIVE' && /usr/bin/niri msg reload-outputs 2>/dev/null && notify-send 'Display Mode' 'Reverted to previous mode.'"
+  # run detached
+  setsid nohup bash -c "sleep $seconds && $cmd" >/dev/null 2>&1 &
+  notify "Scheduled rollback in ${minutes} minutes"
+}
+
+# ----- main workflow -----
+log "Invocation"
+
+# detect externals and states
+externals="$(detect_externals | paste -sd ', ' -)"
+if [ -z "$externals" ]; then externals="(none)"; fi
+log "Detected externals: $externals"
+
+# Build choices depending on detected hardware
+choices=("Laptop only" "External only" "Both (Extend)" "Mirror (Duplicate)")
+choice=$(zenity --list --title="Switch display mode" \
+  --text="Connected externals: $externals\nChoose mode:" \
+  --column="Mode" "${choices[@]}" --height=260 --width=360 --ok-label="Select" --cancel-label="Cancel" --timeout=15) || true
+
+if [ -z "$choice" ]; then
+  notify "Canceled or timed out — no change."
+  log "User canceled or timeout"
+  exit 0
+fi
+
+# Map choice to profile
+case "$choice" in
+  "Laptop only") PROFILE="laptop_only.kdl" ;;
+  "External only") PROFILE="external_only.kdl" ;;
+  "Both (Extend)") PROFILE="both.kdl" ;;
+  "Mirror (Duplicate)") PROFILE="mirror.kdl" ;;
+  *) notify "Invalid choice"; exit 1 ;;
+esac
+
+# Ask for optional timed duration
+dur_choice=$(zenity --list --title="Temporary mode?" \
+  --text="Apply ${choice}. Make it temporary?" \
+  --column="Option" "Keep until I change" "Set timeout (minutes)" --timeout=10) || true
+
+if [ "$dur_choice" = "Set timeout (minutes)" ]; then
+  minutes=$(zenity --entry --title="Timeout minutes" --text="Enter minutes to keep this mode (e.g. 30)" --entry-text="30" --timeout=20) || true
+  # validate numeric
+  if ! [[ "$minutes" =~ ^[0-9]+$ ]]; then
+    notify "Invalid minutes, proceeding without timer."
+    minutes=0
+  fi
+else
+  minutes=0
+fi
+
+# Confirm final action
+zenity --question --title="Confirm" --text="Switch to: ${choice} ?" --timeout=12
+if [ $? -ne 0 ]; then
+  notify "Canceled — no change."
+  log "User canceled at confirm"
+  exit 0
+fi
+
+# Save previous link, apply profile
+prev="$(apply_profile "$PROFILE")"
+
+# Verify; on failure rollback immediately
+if ! verify_profile "$PROFILE"; then
+  ln -sf "$prev" "$ACTIVE"
+  /usr/bin/niri msg reload-outputs 2>/dev/null || true
+  notify "Switch failed — rolled back to previous mode."
+  log "Verification failed for $PROFILE; rolled back to $prev"
+  exit 1
+fi
+
+notify "Switched to ${choice}"
+
+# If a timer was requested, schedule rollback (restore previous symlink)
+if [ "${minutes:-0}" -gt 0 ] && [ -n "$prev" ]; then
+  schedule_rollback "$prev" "$minutes"
+fi
+
+exit 0

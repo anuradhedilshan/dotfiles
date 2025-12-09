@@ -1,0 +1,26 @@
+2025-12-10 03:05:46 | Invocation
+2025-12-10 03:05:46 | Detected externals: preferred,HDMI-A-1 preferred,current, preferred
+2025-12-10 03:05:59 | Applying: external_only
+2025-12-10 03:05:59 | apply_profile: from=/home/anuradhe/.config/niri/profiles/external_only.kdl to=/home/anuradhe/.config/niri/profiles/external_only.kdl
+2025-12-10 03:06:00 | Switch failed — rolled back to previous mode.
+2025-12-10 03:06:00 | Verification failed for external_only.kdl; rolled back to /home/anuradhe/.config/niri/profiles/external_only.kdl
+2025-12-10 03:06:39 | Invocation
+2025-12-10 03:06:39 | Detected externals: preferred,HDMI-A-1 preferred,current, preferred
+2025-12-10 03:06:40 | Invocation
+2025-12-10 03:06:40 | Detected externals: preferred,HDMI-A-1 preferred,current, preferred
+2025-12-10 03:06:41 | Canceled or timed out — no change.
+2025-12-10 03:06:41 | User canceled or timeout
+2025-12-10 03:06:56 | Applying: mirror
+2025-12-10 03:06:56 | apply_profile: from=/home/anuradhe/.config/niri/profiles/external_only.kdl to=/home/anuradhe/.config/niri/profiles/mirror.kdl
+2025-12-10 03:06:57 | Switch failed — rolled back to previous mode.
+2025-12-10 03:06:57 | Verification failed for mirror.kdl; rolled back to /home/anuradhe/.config/niri/profiles/external_only.kdl
+2025-12-10 03:12:52 | Invocation
+2025-12-10 03:12:52 | Detected externals: preferred,HDMI-A-1 preferred
+2025-12-10 03:13:02 | Invocation
+2025-12-10 03:13:02 | Detected externals: preferred,HDMI-A-1 preferred
+2025-12-10 03:13:11 | Invocation
+2025-12-10 03:13:11 | Detected externals: preferred,HDMI-A-1 preferred
+2025-12-10 03:14:37 | Invocation
+2025-12-10 03:14:37 | Detected externals: preferred,HDMI-A-1 preferred,current, preferred
+2025-12-10 03:14:38 | Canceled or timed out — no change.
+2025-12-10 03:14:38 | User canceled or timeout
