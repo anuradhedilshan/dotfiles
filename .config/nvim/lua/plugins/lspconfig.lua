@@ -143,7 +143,7 @@ return {
         if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf) then
           -- Enable inlay hints by default
           vim.lsp.inlay_hint.enable(true, { bufnr = event.buf })
-          
+
           map('<leader>th', function()
             vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
           end, '[T]oggle Inlay [H]ints')
@@ -210,7 +210,7 @@ return {
         settings = {
           typescript = {
             inlayHints = {
-              includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all'
+              includeInlayParameterNameHints = 'all', -- 'none' | 'literals' | 'all'
               includeInlayParameterNameHintsWhenArgumentMatchesName = true,
               includeInlayVariableTypeHints = true,
               includeInlayFunctionParameterTypeHints = true,
@@ -222,7 +222,7 @@ return {
           },
           javascript = {
             inlayHints = {
-              includeInlayParameterNameHints = "all",
+              includeInlayParameterNameHints = 'all',
               includeInlayParameterNameHintsWhenArgumentMatchesName = true,
               includeInlayVariableTypeHints = true,
               includeInlayFunctionParameterTypeHints = true,
@@ -266,7 +266,8 @@ return {
     -- for you, so that they are available from within Neovim.
     local ensure_installed = vim.tbl_keys(servers or {})
     vim.list_extend(ensure_installed, {
-      'stylua', -- Used to format Lua code
+      'stylua', -- Used to format Lua code,
+      'markdownlint-cli2',
     })
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -286,4 +287,3 @@ return {
     }
   end,
 }
-
