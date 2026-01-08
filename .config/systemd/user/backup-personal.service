@@ -1,0 +1,7 @@
+[Unit]
+Description=Backup Documents to External Drive
+
+[Service]
+Type=oneshot
+ExecStart=/home/anuradhe/.local/bin/backup_personal.sh
+

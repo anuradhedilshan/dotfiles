@@ -1,0 +1,11 @@
+[Unit]
+Description=Daily backup timer for Documents
+
+[Timer]
+OnCalendar=*-*-* 10:00:00
+Persistent=true
+Unit=backup-personal.service
+
+[Install]
+WantedBy=default.target
+
