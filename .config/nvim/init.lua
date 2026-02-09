@@ -234,5 +234,19 @@ require('lazy').setup {
 
 -- ColorMyPencils()
 
-vim.cmd.colorscheme 'rose-pine'
+-- vim.cmd.colorscheme 'rose-pine'
+-- vim.cmd.colorscheme 'base16-rose-pine'
+ColorMyPencils 'base16-rose-pine'
 vim.keymap.set('n', '<leader>gs', '<cmd>Neogit<CR>', { desc = 'Open neogit Status' })
+
+-- Fix : Oil ctrl + hjkl not working
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'oil',
+  callback = function()
+    local opts = { buffer = true, silent = true }
+    vim.keymap.set('n', '<C-h>', '<C-w>h', opts)
+    vim.keymap.set('n', '<C-l>', '<C-w>l', opts)
+    vim.keymap.set('n', '<C-j>', '<C-w>j', opts)
+    vim.keymap.set('n', '<C-k>', '<C-w>k', opts)
+  end,
+})
