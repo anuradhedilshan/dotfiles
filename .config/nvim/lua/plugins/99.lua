@@ -51,7 +51,7 @@ return {
 
         --- What autocomplete do you use.  We currently only
         --- support cmp right now
-        source = nil,
+        source = 'blink',
       },
 
       --- WARNING: if you change cwd then this is likely broken
