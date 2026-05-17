@@ -93,13 +93,15 @@ vim.o.termguicolors = true -- set term gui colors (most terminalswW support this
 vim.o.foldenable = true
 -- open files with folding enabled
 vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
-vim.opt.foldmethod = 'expr' -- use expression for folds -- Treesitter folding
+-- vim.opt.foldmethod = '' -- use expression for folds -- Treesitter folding
+vim.opt.foldtext = 'v:lua.vim.treesitter.foldtext()'
+
 vim.o.foldlevel = 99 -- keep folds open by default
 vim.o.foldlevelstart = 99 -- don’t collapse everything on file open
 -- smart Indent
 vim.opt.smartindent = true
 
-vim.opt.wrap = false
+vim.opt.wrap = true
 
 vim.opt.swapfile = false
 vim.opt.backup = false
@@ -250,3 +252,9 @@ vim.api.nvim_create_autocmd('FileType', {
     vim.keymap.set('n', '<C-k>', '<C-w>k', opts)
   end,
 })
+
+vim.filetype.add {
+  extension = {
+    tsx = 'typescriptreact',
+  },
+}
