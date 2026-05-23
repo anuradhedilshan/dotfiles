@@ -6,7 +6,7 @@ vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
-
+vim.opt.conceallevel = 1
 -- Disable automatic directory switching
 vim.opt.autochdir = false
 
@@ -252,9 +252,3 @@ vim.api.nvim_create_autocmd('FileType', {
     vim.keymap.set('n', '<C-k>', '<C-w>k', opts)
   end,
 })
-
-vim.filetype.add {
-  extension = {
-    tsx = 'typescriptreact',
-  },
-}

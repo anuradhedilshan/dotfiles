@@ -1,30 +1,43 @@
 return {
   'obsidian-nvim/obsidian.nvim',
-  version = '*', -- recommended, use latest release instead of latest commit
-  ft = 'markdown',
-  enabled = false,
-  -- Replace the above line with this if you only want to load obsidian.nvim for markdown files in your vault:
-  -- event = {
-  --   -- If you want to use the home shortcut '~' here you need to call 'vim.fn.expand'.
-  --   -- E.g. "BufReadPre " .. vim.fn.expand "~" .. "/my-vault/*.md"
-  --   -- refer to `:h file-pattern` for more examples
-  --   "BufReadPre path/to/my-vault/*.md",
-  --   "BufNewFile path/to/my-vault/*.md",
-  -- },
+  lazy = true,
+  dependencies = {
+    'nvim-telescope/telescope.nvim',
+    'folke/snacks.nvim', -- optional
+  },
+  cmd = {
+    'Obsidian',
+  },
+
+  keys = {
+    { '<leader>nd', '<cmd>Obsidian dailies<CR>', desc = 'Obsidian daily note' },
+    { '<leader>nt', '<cmd>Obsidian today<CR>', desc = 'Obsidian today note' },
+    { '<leader>nd', '<cmd>Obsidian new_from_template <CR>', desc = 'Create from template' },
+  },
+
   ---@module 'obsidian'
   ---@type obsidian.config
   opts = {
+    legacy_commands = false, -- this will be removed in 4.0.0
+
     workspaces = {
       {
         name = 'Notes',
-        path = '/mnt/dev/ProjectManagment/Notes',
+        path = '~/Documents/Knowledge_Base',
         -- see below for full list of options 👇
       },
     },
+    templates = {
+      folder = '📒 Templates',
+    },
+
+    daily_notes = {
+      template = 'daily-note.md',
+      default_tags = { 'daily' },
+      folder = '🚀 Notes/Daily Notes',
+    },
   },
-  config = function()
-    require('obsidian').setup {
-      legacy_commands = false,
-    }
-  end,
+  -- config = function()
+  --   require('obsidian').setup()
+  -- end,
 }
