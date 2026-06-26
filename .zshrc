@@ -128,3 +128,32 @@ bindkey -s '\ep' "tmux-sessionizer ~/Documents/Projects/"
 
 export PATH="$HOME/.local/bin:$PATH"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+if [ -e /home/anuradhe/.nix-profile/etc/profile.d/nix.sh ]; then . /home/anuradhe/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+
+# opencode
+export PATH=/home/anuradhe/.opencode/bin:$PATH
+
+
+# Added by Antigravity CLI installer
+export PATH="/home/anuradhe/.local/bin:$PATH"
+
+
+uomconnect() {
+    curl -sk https://connect.uom.lk:8443/login \
+        --data-urlencode "username=$UOM_USERNAME" \
+        --data-urlencode "password=$UOM_PASSWORD" \
+        --data "RedirectUrl=" \
+        --data "anonymous=DISABLE" \
+        --data-urlencode "anonymousurl=https://uom.lk/cites" \
+        --data "accesscode=" \
+        --data "accesscode1=DISABLE" \
+        --data "checkbox=on" \
+        --data "checkbox1=on"
+}
+
+
+
+
+
+
