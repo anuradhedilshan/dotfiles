@@ -25,9 +25,9 @@ return {
     }
 
     -- Bufferline mappings navigation
-    -- BufferLine: Ctrl + 1-9
+    -- BufferLine: ALT + 1-9
     for i = 1, 9 do
-      vim.keymap.set('n', '<C-' .. i .. '>', '<Cmd>BufferLineGoToBuffer ' .. i .. '<CR>', { desc = 'Go to buffer ' .. i })
+      vim.keymap.set('n', '<M-' .. i .. '>', '<Cmd>BufferLineGoToBuffer ' .. i .. '<CR>', { desc = 'Go to buffer ' .. i })
     end
 
     -- Super+bd for buffer delete
