@@ -24,9 +24,10 @@ return {
       },
     }
 
-    -- Dynamic buffer navigation: Alt+1-9
+    -- Bufferline mappings navigation
+    -- BufferLine: Ctrl + 1-9
     for i = 1, 9 do
-      vim.keymap.set('n', '<M-' .. i .. '>', '<Cmd>BufferLineGoToBuffer ' .. i .. '<CR>', { desc = 'Go to buffer ' .. i })
+      vim.keymap.set('n', '<C-' .. i .. '>', '<Cmd>BufferLineGoToBuffer ' .. i .. '<CR>', { desc = 'Go to buffer ' .. i })
     end
 
     -- Super+bd for buffer delete
@@ -37,4 +38,3 @@ return {
     vim.keymap.set('n', '<M-n>', '<Cmd>BufferLineCycleNext<CR>', { desc = 'Next buffer' })
   end,
 }
-

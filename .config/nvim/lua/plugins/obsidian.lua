@@ -13,6 +13,9 @@ return {
     { '<leader>nd', '<cmd>Obsidian dailies<CR>', desc = 'Obsidian daily note' },
     { '<leader>nt', '<cmd>Obsidian today<CR>', desc = 'Obsidian today note' },
     { '<leader>nd', '<cmd>Obsidian new_from_template <CR>', desc = 'Create from template' },
+    { '<leader>ns', '<cmd>Obsidian search<CR>', desc = 'Search Obsidian' },
+    { '<leader>nn', '<cmd>Obsidian new<CR>', desc = 'Create new note' },
+    { '<leader>no', '<cmd>Obsidian open<CR>', desc = 'Open Obsidian' },
   },
 
   ---@module 'obsidian'

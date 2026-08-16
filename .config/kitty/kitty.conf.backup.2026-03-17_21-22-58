@@ -27,7 +27,7 @@ term xterm-kitty
 enable_audio_bell no
 
 # os specific tweaks (Gnome window decoration for wayland)
-#linux_display_server x11
+linux_display_server x11
 
 # font
 font_family        SauceCodePro Nerd Font
@@ -87,16 +87,8 @@ map ctrl+shift+right next_tab
 map ctrl+shift+left previous_tab
 map ctrl+shift+q close_tab
 
-#permission
-clipboard_control write-clipboard read-clipboard write-primary read-primary
-
 
 # BEGIN_KITTY_THEME
 # Adwaita darker
 include current-theme.conf
-
-
-#Send shortcuts to neovim bufferline ctrl+1 .. 
-keyboard_protocol 4
-
 # END_KITTY_THEME
