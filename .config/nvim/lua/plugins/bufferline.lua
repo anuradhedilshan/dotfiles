@@ -34,7 +34,7 @@ return {
     vim.keymap.set('n', '<M-d>', '<Cmd>bdelete<CR>', { desc = 'Delete current buffer' })
 
     -- Additional buffer navigation
-    vim.keymap.set('n', '<M-p>', '<Cmd>BufferLineCyclePrev<CR>', { desc = 'Previous buffer' })
+    vim.keymap.set('n', '<M-m>', '<Cmd>BufferLineCyclePrev<CR>', { desc = 'Previous buffer' })
     vim.keymap.set('n', '<M-n>', '<Cmd>BufferLineCycleNext<CR>', { desc = 'Next buffer' })
   end,
 }
